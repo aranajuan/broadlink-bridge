@@ -24,6 +24,8 @@ DEFAULTS = {
     },
     'http': {
         'port': '8780',
+        'user': '',
+        'password': ''
     },
     'lirc': {
         'port': '8765',
@@ -88,7 +90,7 @@ def main():
 
     REGISTRY.discover(config.getint('discovery', 'timeout'))
 
-    httpd_start(config.getint('http', 'port'))
+    httpd_start(config.getint('http', 'port'),config.get('http', 'user'),config.get('http', 'password'))
     lircd_start(config.getint('lirc', 'port'))
     mqtt_connect(config.get('mqtt', 'broker_url'))
 

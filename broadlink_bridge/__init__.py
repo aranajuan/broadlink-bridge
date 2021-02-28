@@ -169,6 +169,10 @@ class Device:
             code = command_code
         return self._transmit(code, repeat=repeat)
 
+    def check_temperature(self):
+        if self.connect():
+            return self._dev.check_temperature()
+
     def _transmit(self, code, repeat=None):
         (code, repeat) = ir_decode(code, repeat=repeat)
         LOGGER.debug('Transmitting to: %s (repeat: %s)', self, repeat)

@@ -28,7 +28,7 @@ To run: `broadlink-bridge [config-file]`
 
 ### Docker
 
-(to be written)
+docker run -v ${PWD}/config:/config -p 8780:8780  aranajuan/broadlink-bridge:latest
 
 ### Usage in Home Assistant
 
@@ -201,6 +201,7 @@ will result in the code being sent 2x3x2 = 12 times (11 repeats).
 verb | path | description
 --|--|--
 POST | /device/*device*  | transmits the submitted [code](#code) via [device](#device)
+POST | /device/*device*/temperature  | get temperature
 
 Status codes:
 
