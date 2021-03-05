@@ -37,6 +37,34 @@ class Handler(http.server.BaseHTTPRequestHandler):
         
         return True
 
+    def do_GET(self):
+        
+        if not self.check_auth():
+            self.do_AUTHHEAD()
+            return
+
+        path = self.path
+        if not path.startswith('/device/'):
+            return self.send_error(404)
+        path = path[8:]
+
+        path = path.split('/')
+
+        device_id = path[0]
+        device = REGISTRY.find_device(device_id)
+        if not device:
+            return self.send_error(404, 'Device not found: ' + device_id)     
+        try:
+            if len(path)>=2 and path[1] == 'learn':
+                temp = device.learn_get()
+                self.send_response(200, 'OK')
+                self.end_headers()
+                self.wfile.write(str(temp).encode('utf-8'))
+                return
+        except ValueError:
+            pass
+        self.send_error(400, 'Bad payload')
+
     def do_POST(self):
         
         if not self.check_auth():
@@ -63,6 +91,11 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 self.send_response(200, 'OK')
                 self.end_headers()
                 self.wfile.write(str(temp).encode('utf-8'))
+                return
+            if len(path)>=2 and path[1] == 'learn':
+                device.learn()
+                self.send_response(200, 'OK')
+                self.end_headers()
                 return
             if not payload:
                 return self.send_error(400, 'No payload')

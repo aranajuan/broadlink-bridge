@@ -202,6 +202,9 @@ verb | path | description
 --|--|--
 POST | /device/*device*  | transmits the submitted [code](#code) via [device](#device)
 POST | /device/*device*/temperature  | get temperature
+POST | /device/*device*/learn  | start learning mode
+GET | /device/*device*/learn  | return learnt code
+
 
 Status codes:
 

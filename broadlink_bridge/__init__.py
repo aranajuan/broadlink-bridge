@@ -1,10 +1,11 @@
 import broadlink
 import logging
-import pkg_resources
 from .util import *
+import base64
 
+__path__.append(...)  # type: ignore  # mypy issue #1422
 NAME    = 'broadlink-bridge'
-VERSION = pkg_resources.get_distribution(NAME).version
+VERSION = "linux"
 SERVER  = NAME + '/' + VERSION
 LOGGER  = logging.getLogger(__name__)
 
@@ -172,6 +173,14 @@ class Device:
     def check_temperature(self):
         if self.connect():
             return self._dev.check_temperature()
+
+    def learn(self):
+        if self.connect():
+            return self._dev.enter_learning()
+
+    def learn_get(self):
+        if self.connect():
+            return base64.b64encode(self._dev.check_data()).decode("ascii") 
 
     def _transmit(self, code, repeat=None):
         (code, repeat) = ir_decode(code, repeat=repeat)
